@@ -1,0 +1,9 @@
+<!--Jinja2 uses the below function to get the 'base template' 'base.html' and inserts the lines between block content and end block-->
+{% extends "base.html" %}
+
+{% block content %}
+          <h1>Hello, {{user.username}}!</h1>
+      {% for post in posts %}
+      <div><p>{{ post.author.username }} says: <b>{{post.body}}</b></p></div>
+      {% endfor %}
+{% endblock %}
