@@ -1,9 +1,14 @@
 from datetime import datetime
-from app import db
+from app import db, login
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin
 
 
 # create user class to at to the database object
-class User(db.Model):
+# Inherit UserMixin class from flask_login to get the four attributes required to work with flask_login:
+# 3 Booleans - is_authenticated; is_active, is_anonymous;
+# 1 str - get_id() (this returns a unique id for the user)
+class User(UserMixin, db.Model):
     # create fields as database columns
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -19,6 +24,15 @@ class User(db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+    # function for setting password
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    # function for checking password
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,3 +45,8 @@ class Post(db.Model):
 
     def __repr__(self):
         return f'<Post {self.body}>'
+
+
+@login.user_loader
+def load_user(id):
+    return User.query.get(int(id))
