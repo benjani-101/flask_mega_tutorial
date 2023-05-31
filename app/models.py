@@ -2,6 +2,7 @@ from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
 
 
 # create user class to at to the database object
@@ -20,6 +21,10 @@ class User(UserMixin, db.Model):
     # representing the model class that represents the many (in this case the posts)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
+    # Additional info
+    about_me = db.Column(db.String(140))
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+
     # __repr__ function tells python what to show when the object is printed - useful for debugging
     def __repr__(self):
         return f'<User {self.username}>'
@@ -31,6 +36,13 @@ class User(UserMixin, db.Model):
     # function for checking password
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    # return avatar from 'Gravatar'
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode('utf-8')).hexdigest()
+        return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
+
+
 
 
 
