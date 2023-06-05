@@ -56,3 +56,9 @@ class EditProfileForm(FlaskForm):
 # empty form for one-click actions (e.g. follow & unfollow)
 class EmptyForm(FlaskForm):
     submit = SubmitField('Submit')
+
+
+# form for submitting blog posts
+class PostForm(FlaskForm):
+    post = TextAreaField("What's on your mind?", validators=[DataRequired(), Length(min=1, max=140)])
+    submit = SubmitField()
