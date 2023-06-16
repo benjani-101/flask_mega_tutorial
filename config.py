@@ -17,3 +17,4 @@ class Config(object):
     ADMINS = ['ben.crawley@tvsscs.com']
 
     POSTS_PER_PAGE = 3
+
