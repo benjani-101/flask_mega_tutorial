@@ -11,7 +11,8 @@
                 {{ post.author.username }}
             </a>
             says:<br>
-            {{post.body}}
+            {{ post.body }} <br>
+            <i style="font-size: small">{{ moment(post.timestamp).fromNow() }}</i>
         </td>
     </tr>
 </table>
